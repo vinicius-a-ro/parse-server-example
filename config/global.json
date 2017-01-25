@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Bydoo - Johnnie": {
+            "applicationId": "MGRCcVpPIv0LX1tLlZWA41aNdA5HCdwouewpxYEe", 
+            "masterKey": "9FwBdd5uMaSshRjD0MBKAD9JE3cojNtemBXSDEBU"
+        }, 
+        "_default": {
+            "link": "Bydoo - Johnnie"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.19"
+    }
+}
