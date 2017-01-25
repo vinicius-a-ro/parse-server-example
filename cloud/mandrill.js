@@ -1,7 +1,7 @@
 // -----------------------------------
 // load modules
 // 
-var mUtil 		= require('cloud/util.js');
+var mUtil 		= require('./cloud/util.js');
 
 // -----------------------------------
 // main functions

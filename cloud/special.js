@@ -1,5 +1,5 @@
 
-var mUtil = require('cloud/util.js');
+var mUtil = require('./cloud/util.js');
 
 exports.loadStoreWithId = function(storeId) 
 {

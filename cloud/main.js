@@ -23,15 +23,15 @@ curl -k -X POST \
     
 */
 
-var mUser       = require('cloud/user.js');
-var mEmail      = require('cloud/email.js');
-var mStore      = require('cloud/store.js');
-var mCampaign   = require('cloud/campaign.js');
-var mReward     = require('cloud/reward.js');
-var mPoints     = require('cloud/points.js');
-var mPasswords  = require('cloud/passwords.js');
-var mUtil       = require('cloud/util.js');
-var mSpecial    = require('cloud/special.js');
+var mUser       = require('./cloud/user.js');
+var mEmail      = require('./cloud/email.js');
+var mStore      = require('./cloud/store.js');
+var mCampaign   = require('./cloud/campaign.js');
+var mReward     = require('./cloud/reward.js');
+var mPoints     = require('./cloud/points.js');
+var mPasswords  = require('./cloud/passwords.js');
+var mUtil       = require('./cloud/util.js');
+var mSpecial    = require('./cloud/special.js');
 
 // ----------------------------------
 Parse.Cloud.job("RaiseCheckinPointsAmountForLunch", function(request, response) 
