@@ -13,49 +13,49 @@ curl -k -X POST \
   -d '{"skip":1600}' \
   https://api.parse.com/1/functions/UpdateUserBirthdays
 
-      
+
 curl -k -X POST \
   -H "X-Parse-Application-Id: MGRCcVpPIv0LX1tLlZWA41aNdA5HCdwouewpxYEe" \
   -H "X-Parse-Master-Key: 9FwBdd5uMaSshRjD0MBKAD9JE3cojNtemBXSDEBU" \
   -H "Content-Type: application/json" \
   -d '{"skip":0}' \
   https://api.parse.com/1/jobs/ManageNoSocialCheckinPointsAmount
-    
+
 */
 
-var mUser       = require('./cloud/user.js');
-var mEmail      = require('./cloud/email.js');
-var mStore      = require('./cloud/store.js');
-var mCampaign   = require('./cloud/campaign.js');
-var mReward     = require('./cloud/reward.js');
-var mPoints     = require('./cloud/points.js');
-var mPasswords  = require('./cloud/passwords.js');
-var mUtil       = require('./cloud/util.js');
-var mSpecial    = require('./cloud/special.js');
+var mUser       = require('./user.js');
+var mEmail      = require('./email.js');
+var mStore      = require('./store.js');
+var mCampaign   = require('./campaign.js');
+var mReward     = require('./reward.js');
+var mPoints     = require('./points.js');
+var mPasswords  = require('./passwords.js');
+var mUtil       = require('./util.js');
+var mSpecial    = require('./special.js');
 
 // ----------------------------------
-Parse.Cloud.job("RaiseCheckinPointsAmountForLunch", function(request, response) 
+Parse.Cloud.job("RaiseCheckinPointsAmountForLunch", function(request, response)
 {
     mSpecial.manageNoSocialPointsCheckinAmount(response);
 });
 
 // ----------------------------------
-Parse.Cloud.job("LowCheckinPointsAmountForLunch", function(request, response) 
+Parse.Cloud.job("LowCheckinPointsAmountForLunch", function(request, response)
 {
     mSpecial.manageNoSocialPointsCheckinAmount(response);
 });
 
 // ----------------------------------
-Parse.Cloud.job("SendEmail", function(request, response) 
+Parse.Cloud.job("SendEmail", function(request, response)
 {
     m.manageNoSocialPointsCheckinAmount(response);
 });
 
 // ----------------------------------
-Parse.Cloud.define("UpdateUserBirthdays", function(request, response) 
+Parse.Cloud.define("UpdateUserBirthdays", function(request, response)
 {
     // list the users to add points and set the campaign
-    var User = Parse.Object.extend("User"); 
+    var User = Parse.Object.extend("User");
     var query = new Parse.Query(User);
     query.skip(request.params.skip);
     query.ascending("createdAt");
@@ -66,11 +66,11 @@ Parse.Cloud.define("UpdateUserBirthdays", function(request, response)
 
     query.find(
     {
-        success: function(users) 
+        success: function(users)
         {
             var queries = [];
 
-            for (var i = 0; i < users.length; i++) 
+            for (var i = 0; i < users.length; i++)
             {
                 var user = users[i];
                 var minutes = 1000 * 60;
@@ -86,7 +86,7 @@ Parse.Cloud.define("UpdateUserBirthdays", function(request, response)
             };
 
             Parse.Cloud.useMasterKey();
-            Parse.Object.saveAll(users, 
+            Parse.Object.saveAll(users,
             {
                 success: function(list) {
                     responseMsg += " (total: "+list.length+")";
@@ -104,7 +104,7 @@ Parse.Cloud.define("UpdateUserBirthdays", function(request, response)
 });
 
 // -----------------------------------
-Parse.Cloud.define("GetUserFromPointId", function(request, response) 
+Parse.Cloud.define("GetUserFromPointId", function(request, response)
 {
     /*
     curl -k -X POST \
@@ -118,7 +118,7 @@ Parse.Cloud.define("GetUserFromPointId", function(request, response)
     var pointObjectId = request.params.id;
 
     // list the users to add points and set the campaign
-    var User = Parse.Object.extend("User"); 
+    var User = Parse.Object.extend("User");
     var query = new Parse.Query(User);
     query.limit(100);
     query.skip(request.params.skip);
@@ -130,11 +130,11 @@ Parse.Cloud.define("GetUserFromPointId", function(request, response)
 
     query.find(
     {
-        success: function(users) 
+        success: function(users)
         {
             var queries = [];
 
-            for (var i = 0; i < users.length; i++) 
+            for (var i = 0; i < users.length; i++)
             {
                 var user = users[i];
                 var pointsRelation = user.relation("points");
@@ -148,11 +148,11 @@ Parse.Cloud.define("GetUserFromPointId", function(request, response)
             {
                 qs.shift().find(
                 {
-                    success: function(userPoints) 
+                    success: function(userPoints)
                     {
                         var aUser = users.shift();
 
-                        for (var i = 0; i < userPoints.length; i++) 
+                        for (var i = 0; i < userPoints.length; i++)
                         {
                             if (userPoints[i].id == pointObjectId) {
                                 response.success("User: " + aUser.id);
@@ -162,7 +162,7 @@ Parse.Cloud.define("GetUserFromPointId", function(request, response)
 
                         if(qs.length) {
                             makeQueries(qs);
-                        } else 
+                        } else
                         {
                             response.success("no user found "+responseMsg);
                         }
@@ -180,14 +180,14 @@ Parse.Cloud.define("GetUserFromPointId", function(request, response)
 });
 
 // -----------------------------------
-Parse.Cloud.beforeSave("Points", function(request, response) 
+Parse.Cloud.beforeSave("Points", function(request, response)
 {
     var pointsObject = request.object;
     mPoints.handleInvalidStore(request, response, pointsObject);
 });
 
 // -----------------------------------
-Parse.Cloud.beforeSave(Parse.User, function(request, response) 
+Parse.Cloud.beforeSave(Parse.User, function(request, response)
 {
     var user = request.object;
     user.set('usedWelcomeReward', true);
@@ -195,21 +195,21 @@ Parse.Cloud.beforeSave(Parse.User, function(request, response)
 });
 
 // -----------------------------------
-Parse.Cloud.afterSave(Parse.User, function(request, response) 
+Parse.Cloud.afterSave(Parse.User, function(request, response)
 {
     var user = request.object;
-    mUser.subscribeAndSendWelcomeEmailToNewUser(request, response, user);  
+    mUser.subscribeAndSendWelcomeEmailToNewUser(request, response, user);
 });
 
 // -----------------------------------
-Parse.Cloud.define("SubscribeAllUsers", function(request, response) 
+Parse.Cloud.define("SubscribeAllUsers", function(request, response)
 {
     var skip = request.params.skip;
-    mEmail.subscribeAllUsersFunction(request, response, skip);	
+    mEmail.subscribeAllUsersFunction(request, response, skip);
 });
 
 // ----------------------------------
-Parse.Cloud.define("GetCheckinPoints", function(request, response) 
+Parse.Cloud.define("GetCheckinPoints", function(request, response)
 {
     var user = request.params.userId;
     var store = request.params.storeId;
@@ -228,11 +228,11 @@ Parse.Cloud.define("GetCheckinPoints", function(request, response)
 });
 
 // ----------------------------------
-Parse.Cloud.define("RemoveAllSpecialRewards", function(request, response) 
+Parse.Cloud.define("RemoveAllSpecialRewards", function(request, response)
 {
-    mReward.removeAllSpecialRewards(request, response, 
+    mReward.removeAllSpecialRewards(request, response,
     {
-        success: function(httpResponse) 
+        success: function(httpResponse)
         {
             response.success("Success: "+ httpResponse.text);
         },
@@ -243,7 +243,7 @@ Parse.Cloud.define("RemoveAllSpecialRewards", function(request, response)
 });
 
 // ----------------------------------
-Parse.Cloud.job("SendMissingYouCampaign", function(request, response) 
+Parse.Cloud.job("SendMissingYouCampaign", function(request, response)
 {
     /*
     curl -k -X POST \
@@ -256,7 +256,7 @@ Parse.Cloud.job("SendMissingYouCampaign", function(request, response)
 
     mCampaign.sendMissingYouCampaignFunction(request, "5s2uJMbvXv",
     {
-        success: function(httpResponse) 
+        success: function(httpResponse)
         {
             response.success("Success: "+ httpResponse);
         },
@@ -267,7 +267,7 @@ Parse.Cloud.job("SendMissingYouCampaign", function(request, response)
 });
 
 // ----------------------------------
-Parse.Cloud.job("SendEmailToCampaignUsers", function(request, response) 
+Parse.Cloud.job("SendEmailToCampaignUsers", function(request, response)
 {
     /*
     curl -k -X POST \
@@ -280,7 +280,7 @@ Parse.Cloud.job("SendEmailToCampaignUsers", function(request, response)
 
     mCampaign.sendEmailToCampaignParticipantsFunction(request, response, "CHSbXSmBEj", "johnnie-fevereiro-2", "Você conhece nossas outras promoções? :)",
     {
-        success: function(httpResponse) 
+        success: function(httpResponse)
         {
             response.success("Success: "+ httpResponse);
         },
@@ -292,30 +292,30 @@ Parse.Cloud.job("SendEmailToCampaignUsers", function(request, response)
 
 
 // ----------------------------------
-Parse.Cloud.define("UseReward", function(request, response) 
+Parse.Cloud.define("UseReward", function(request, response)
 {
     var userId = request.params.userId;
     var rewardId = request.params.rewardId;
 
-    mUser.getUserById(userId, 
+    mUser.getUserById(userId,
     {
-      success: function(user) 
+      success: function(user)
       {
         mReward.getRewardById(rewardId,
         {
-          success: function(reward) 
+          success: function(reward)
           {
             mStore.getStoreById(reward.get("store").id,
             {
-              success: function(store) 
+              success: function(store)
               {
-                mUser.incrementUserPointsByAmount(user, reward.get("minimum_points")*(-1), 
+                mUser.incrementUserPointsByAmount(user, reward.get("minimum_points")*(-1),
                 {
                   success: function(userPoints)
                   {
                     mReward.saveUsedReward(user, store, reward,
                     {
-                      success: function() 
+                      success: function()
                       {
                         // analytics ----------------------
                         var dimensions = {
@@ -339,14 +339,14 @@ Parse.Cloud.define("UseReward", function(request, response)
             },
             error: function(error) {
               response.error("Error: " + error.message);
-            } 
+            }
             });
         },
         error: function(error) {
           response.error("Error: " + error.message);
         }
         });
-      },  
+      },
       error: function(error) {
         response.error("Error: " + error.message);
       }
@@ -354,22 +354,22 @@ Parse.Cloud.define("UseReward", function(request, response)
 });
 
 // ----------------------------------
-Parse.Cloud.define("GetSpecialReward", function(request, response) 
+Parse.Cloud.define("GetSpecialReward", function(request, response)
 {
     var userId = request.params.userId;
     var storeId = request.params.storeId;
 
-    mUser.getUserById(userId, 
+    mUser.getUserById(userId,
     {
-      success: function(user) 
+      success: function(user)
       {
         mStore.getStoreById(storeId,
         {
-          success: function(store) 
+          success: function(store)
           {
             mCampaign.getCampaignFromUserStore(user, store,
             {
-              success: function(campaign) 
+              success: function(campaign)
               {
                 response.success(campaign);
               },
@@ -390,15 +390,15 @@ Parse.Cloud.define("GetSpecialReward", function(request, response)
 });
 
 // -----------------------------------
-Parse.Cloud.define("DeleteOldPasswords", function(request, response) 
+Parse.Cloud.define("DeleteOldPasswords", function(request, response)
 {
     mPasswords.deleteOldPasswords(
     {
-        success: function(success) 
+        success: function(success)
         {
             response.success(success.message);
         },
-        error: function(error) 
+        error: function(error)
         {
             response.error(error.message);
         }
