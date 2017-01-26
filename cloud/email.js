@@ -1,4 +1,4 @@
-var mMandril      = require('./mandril.js');
+var mMandril      = require('./mandrill.js');
 
 exports.sendEmail = function(request, response, subject, from_email, from_name, to_email, to_name, html)
 {
