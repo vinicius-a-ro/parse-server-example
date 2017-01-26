@@ -1,7 +1,7 @@
 
-var mUtil = require('./cloud/util.js');
+var mUtil = require('./util.js');
 
-exports.loadStoreWithId = function(storeId) 
+exports.loadStoreWithId = function(storeId)
 {
   	var Store = Parse.Object.extend("Store");
     var storeQuery = new Parse.Query(Store);
@@ -17,9 +17,9 @@ exports.loadStoreWithId = function(storeId)
     });
 }
 
-exports.manageNoSocialPointsCheckinAmount = function(response) 
+exports.manageNoSocialPointsCheckinAmount = function(response)
 {
-    var Settings = Parse.Object.extend("Settings"); 
+    var Settings = Parse.Object.extend("Settings");
     var query = new Parse.Query(Settings);
 
     query.first(

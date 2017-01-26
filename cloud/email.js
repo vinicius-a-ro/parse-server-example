@@ -1,6 +1,6 @@
-var mMandril      = require('./cloud/mandril.js');
+var mMandril      = require('./mandril.js');
 
-exports.sendEmail = function(request, response, subject, from_email, from_name, to_email, to_name, html) 
+exports.sendEmail = function(request, response, subject, from_email, from_name, to_email, to_name, html)
 {
     var to = [
         {
@@ -11,7 +11,7 @@ exports.sendEmail = function(request, response, subject, from_email, from_name, 
 
     mMandrill.sendHTML(subject, from_email, from_name, to, html,
     {
-        success: function(httpResponse) 
+        success: function(httpResponse)
         {
             returnBlock.success(true);
         },
@@ -20,10 +20,10 @@ exports.sendEmail = function(request, response, subject, from_email, from_name, 
             returnBlock.error("Erro ao enviar email");
         }
     });
-}    
-exports.subscribeAllUsersFunction = function(request, response, skip) 
+}
+exports.subscribeAllUsersFunction = function(request, response, skip)
 {
-    function string_to_slug(str) 
+    function string_to_slug(str)
     {
       if (str == null || str == "") {
         return null;
@@ -49,18 +49,18 @@ exports.subscribeAllUsersFunction = function(request, response, skip)
 
     query.find(
     {
-        success: function(users) 
+        success: function(users)
         {
             var params = new Object();
             var apikey = "6e6e743aa03eca83206092397dd3c1a4-us3";
             var mailchimpListId = "6caf6d4dd6";
             var batch = [];
 
-            for (var i = 0; i < users.length; i++) 
+            for (var i = 0; i < users.length; i++)
             {
                 var user = users[i];
 
-                if (user.get("email") != null) 
+                if (user.get("email") != null)
                 {
                     var email = new Object();
                     var emailInfo = new Object();
@@ -80,7 +80,7 @@ exports.subscribeAllUsersFunction = function(request, response, skip)
                     if (firstName == "" || firstName == null) {
                         mergeVars.FNAME = splitedUsername[0];
                         mergeVars.LNAME = splitedUsername[splitedUsername.length-1];
-                    }        
+                    }
                     else {
                         mergeVars.FNAME = firstName;
                         mergeVars.LNAME = lastName;
@@ -113,12 +113,12 @@ exports.subscribeAllUsersFunction = function(request, response, skip)
                 method: "POST",
                 url: "https://us3.api.mailchimp.com/2.0/lists/batch-subscribe.json",
                 body: jsonParams,
-                success: function(httpResponse) 
+                success: function(httpResponse)
                 {
                     // save all users
-                    Parse.Object.saveAll(users, 
+                    Parse.Object.saveAll(users,
                     {
-                        success: function() 
+                        success: function()
                         {
                             console.log("Sucess: user successfully saved!");
                             response.success("Success: "+ httpResponse.text);
@@ -128,7 +128,7 @@ exports.subscribeAllUsersFunction = function(request, response, skip)
                         }
                     });
                 },
-                error: function(httpResponse) 
+                error: function(httpResponse)
                 {
                     console.log('Request failed with response code ' + httpResponse.code + ' :' + httpResponse.text);
                     response.error('Failed: '+ httpResponse.text + " msg: "+responseMsg);
@@ -138,5 +138,5 @@ exports.subscribeAllUsersFunction = function(request, response, skip)
         error: function(error) {
             response.error("Error  " + error.message);
         }
-    });   
+    });
 }

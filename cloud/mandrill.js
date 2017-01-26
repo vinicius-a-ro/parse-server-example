@@ -1,13 +1,13 @@
 // -----------------------------------
 // load modules
-// 
-var mUtil 		= require('./cloud/util.js');
+//
+var mUtil 		= require('./util.js');
 
 // -----------------------------------
 // main functions
-// 
+//
 
-exports.sendHTML = function(subject, from_email, from_name, to, html, returnBlock) 
+exports.sendHTML = function(subject, from_email, from_name, to, html, returnBlock)
 {
 	Parse.Cloud.httpRequest(
 	{
@@ -26,7 +26,7 @@ exports.sendHTML = function(subject, from_email, from_name, to, html, returnBloc
 	            to: to
 			}
 		},
-	    success: function(httpResponse) 
+	    success: function(httpResponse)
 	    {
 			returnBlock.success(true);
 		},
