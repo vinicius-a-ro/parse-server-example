@@ -15,6 +15,7 @@ var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://heroku_9f6784v4:2jqhav796q7lvn92t57ab43atm@ds157248.mlab.com:57248/heroku_9f6784v4',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'MGRCcVpPIv0LX1tLlZWA41aNdA5HCdwouewpxYEe',
+  fileKey: 'MGRCcVpPIv0LX1tLlZWA41aNdA5HCdwouewpxYEe',
   masterKey: process.env.MASTER_KEY || '9FwBdd5uMaSshRjD0MBKAD9JE3cojNtemBXSDEBU', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'https://clubejohnnie-mobile.herokuapp.com/parse',  // Don't forget to change to https if needed
   liveQuery: {
