@@ -21,7 +21,7 @@ var api = new ParseServer({
   serverURL: process.env.SERVER_URL || 'https://clubejohnnie-mobile.herokuapp.com/parse',  // Don't forget to change to https if needed
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
-  }
+  },
   filesAdapter: new S3Adapter(
     process.env.AWS_ACCESS_KEY_ID || "AKIAJ2JUSRZGFZYJDASA",
     process.env.AWS_SECRET_ACCESS_KEY || "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",
