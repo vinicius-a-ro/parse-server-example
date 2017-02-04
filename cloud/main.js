@@ -189,16 +189,16 @@ Parse.Cloud.beforeSave("Points", function(request, response)
 // -----------------------------------
 Parse.Cloud.beforeSave(Parse.User, function(request, response)
 {
-    var user = request.object;
-    user.set('usedWelcomeReward', true);
-    mUser.setNewUserUnsubscribed(request, response, user);
+    // var user = request.object;
+    // user.set('usedWelcomeReward', true);
+    // mUser.setNewUserUnsubscribed(request, response, user);
 });
 
 // -----------------------------------
 Parse.Cloud.afterSave(Parse.User, function(request, response)
 {
-    var user = request.object;
-    mUser.subscribeAndSendWelcomeEmailToNewUser(request, response, user);
+    // var user = request.object;
+    // mUser.subscribeAndSendWelcomeEmailToNewUser(request, response, user);
 });
 
 // -----------------------------------
